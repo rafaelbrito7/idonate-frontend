@@ -10,9 +10,9 @@ import { MUDatePicker } from '../../components/DatePicker'
 
 import { ButtonGroup, Container, FormContainer, Title } from './styles'
 import { IResponse } from '../../interfaces/IResponse'
-import { useContext } from 'react'
-import { SnackbarContext } from '../../contexts/Snackbar'
+
 import { useNavigate } from 'react-router-dom'
+import { useSnackbarContext } from '../../hooks/snackbar/useSnackbarContext'
 
 const registerValidationSchema = zod.object({
   email: zod.string().email(),
@@ -40,14 +40,14 @@ export function Register() {
     },
   })
   const navigate = useNavigate()
-  const showSnackbar = useContext(SnackbarContext)
+  const { showSnackbar } = useSnackbarContext()
 
   if (!showSnackbar) {
     throw new Error('showSnackbar is not available within SnackbarContext')
   }
 
   const onSubmit = async (data: RegisterFormData) => {
-    const result: IResponse = await api.post('/auth/signUp', data)
+    const result: IResponse = await api.post('/auth/register', data)
 
     if (result.data.statusCode === 201) {
       methods.reset()

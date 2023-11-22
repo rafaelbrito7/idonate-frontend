@@ -9,4 +9,18 @@ export interface IDonationCampaign {
   updatedAt: Date
   deletedAt: Date
   campaignOrganizerId: string
+  campaignOrganizer?: {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    birthday: Date
+    cpf: string
+    password: string
+    hashedRt: string
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date
+  }
 }

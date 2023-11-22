@@ -8,11 +8,10 @@ import { api } from '../../../services/api'
 import { TextInput } from '../../../components/TextInput'
 
 import { ButtonGroup, Container, FormContainer, Title } from './styles'
-import { useContext } from 'react'
-import { SnackbarContext } from '../../../contexts/Snackbar'
 
 import { useNavigate } from 'react-router-dom'
 import { CustomCurrencyInput } from '../../../components/CurrencyInput'
+import { useSnackbarContext } from '../../../hooks/snackbar/useSnackbarContext'
 
 const newDonationCampaignFormValidationSchema = zod.object({
   title: zod.string(),
@@ -34,7 +33,7 @@ export function CreateDonationCampaign() {
     },
   })
   const navigate = useNavigate()
-  const showSnackbar = useContext(SnackbarContext)
+  const { showSnackbar } = useSnackbarContext()
 
   if (!showSnackbar) {
     throw new Error('showSnackbar is not available within SnackbarContext')

@@ -9,13 +9,13 @@ import { isLogged } from '../../helpers/isLogged'
 import { destroyCookie } from 'nookies'
 import { api } from '../../services/api'
 import { IResponse } from '../../interfaces/IResponse'
-import { useContext } from 'react'
-import { SnackbarContext } from '../../contexts/Snackbar'
+
 import ToolbarMenu from './ToolbarMenu'
+import { useSnackbarContext } from '../../hooks/snackbar/useSnackbarContext'
 
 export default function CustomToolbar() {
   const navigate = useNavigate()
-  const showSnackbar = useContext(SnackbarContext)
+  const { showSnackbar } = useSnackbarContext()
   const userIsLogged = isLogged()
 
   if (!showSnackbar) {
@@ -49,7 +49,12 @@ export default function CustomToolbar() {
       <ThemeProvider theme={darkTheme}>
         <AppBar position="static" color="primary">
           <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, cursor: 'pointer' }}
+              onClick={() => navigate('/')}
+            >
               IDonate
             </Typography>
 

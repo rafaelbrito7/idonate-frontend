@@ -8,11 +8,11 @@ import { api } from '../../services/api'
 import { TextInput } from '../../components/TextInput'
 
 import { ButtonGroup, Container, FormContainer, Title } from './styles'
-import { useContext } from 'react'
-import { SnackbarContext } from '../../contexts/Snackbar'
 
 import { useNavigate } from 'react-router-dom'
 import { setRefreshTokenCookie, setTokenCookie } from '../../config/tokens'
+
+import { useSnackbarContext } from '../../hooks/snackbar/useSnackbarContext'
 
 const loginFormValidationSchema = zod.object({
   email: zod.string().email(),
@@ -30,7 +30,7 @@ export function Login() {
     },
   })
   const navigate = useNavigate()
-  const showSnackbar = useContext(SnackbarContext)
+  const { showSnackbar } = useSnackbarContext()
 
   if (!showSnackbar) {
     throw new Error('showSnackbar is not available within SnackbarContext')
@@ -48,7 +48,6 @@ export function Login() {
       setRefreshTokenCookie(tokens.refresh_token)
 
       methods.reset()
-      showSnackbar(response.data.message, 'success')
 
       navigate('/', { replace: true })
 

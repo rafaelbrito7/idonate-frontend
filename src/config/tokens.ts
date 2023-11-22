@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { parseCookies, setCookie, destroyCookie } from 'nookies'
+import { setCookie, destroyCookie } from 'nookies'
 
 import { refreshAuthHeader } from '../services/api'
 

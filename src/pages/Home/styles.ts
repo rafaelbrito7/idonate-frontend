@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const HomeContainer = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 90vh; // Viewport Height
@@ -17,6 +17,8 @@ export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
 `
 
 export const FooterContainer = styled.div`

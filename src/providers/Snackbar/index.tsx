@@ -1,36 +1,23 @@
-import React, { useState } from 'react'
-import Snackbar from '@mui/material/Snackbar'
-import { SnackbarContext } from '../../contexts/Snackbar/index'
-import { SnackbarContextType } from '../../contexts/Snackbar/SnackbarContextType'
-import { Alert, AlertColor } from '@mui/material'
+import { Snackbar, Alert } from '@mui/material'
+import SnackbarContext from '../../contexts/Snackbar/index'
+import { useSnackbar } from '../../hooks/snackbar/useSnackbar'
+import { ReactNode } from 'react'
 
-interface SnackbarProviderProps {
-  children: React.ReactNode
-}
-
-const SnackbarProvider: React.FC<SnackbarProviderProps> = ({ children }) => {
-  const [open, setOpen] = useState<boolean>(false)
-  const [message, setMessage] = useState<string>('')
-  const [severity, setSeverity] = useState<AlertColor>('success')
-
-  const showSnackbar: SnackbarContextType = (msg, severity) => {
-    setMessage(msg)
-    setSeverity(severity)
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
+export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
+  const { snackbar, showSnackbar, closeSnackbar } = useSnackbar()
 
   return (
-    <SnackbarContext.Provider value={showSnackbar}>
+    <SnackbarContext.Provider value={{ snackbar, showSnackbar, closeSnackbar }}>
       {children}
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert severity={severity}>{message}</Alert>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
       </Snackbar>
     </SnackbarContext.Provider>
   )
 }
-
-export default SnackbarProvider
