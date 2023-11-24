@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { setCookie, destroyCookie } from 'nookies'
+import nookies from 'nookies'
 
-import { refreshAuthHeader } from '../services/api'
+export const getAccessTokenAndRefreshToken = () => {
+  const cookies = nookies.get()
 
-// export const getTokenCookie = (ctx: undefined) => {
-//   const cookies = parseCookies(ctx)
+  return {
+    accessToken: cookies.access_token,
+    refreshToken: cookies.refresh_token,
+  }
+}
 
-// }
-
-export const setTokenCookie = (cookieName: string, tkt: string) => {
-  setCookie(null, cookieName, tkt, {
-    maxAge: 86400,
+export const setAccessTokenCookie = (cookieName: string, tkt: string) => {
+  nookies.set(null, cookieName, tkt, {
+    maxAge: 86450,
     path: '/',
     sameSite: 'none',
     secure: true,
   })
-  refreshAuthHeader(tkt)
 }
 
 export const setRefreshTokenCookie = (tkt: string) => {
-  setCookie(null, 'refresh_token', tkt, {
-    maxAge: 86400,
+  nookies.set(null, 'refresh_token', tkt, {
+    maxAge: 604850,
     path: '/',
     sameSite: 'none',
     secure: true,
@@ -28,8 +29,7 @@ export const setRefreshTokenCookie = (tkt: string) => {
 }
 
 export const destroyToken = (cookieName: string, ctx?: any) => {
-  destroyCookie(ctx ?? {}, cookieName, {
+  nookies.destroy(ctx ?? {}, cookieName, {
     path: '/',
   })
-  refreshAuthHeader()
 }

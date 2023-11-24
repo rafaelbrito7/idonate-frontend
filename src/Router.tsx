@@ -10,29 +10,33 @@ import { Login } from './pages/Login'
 import { Home } from './pages/Home'
 import { DefaultLayout } from './layouts/DefaultLayout'
 import { CreateDonationCampaign } from './pages/DonationCampaign/Create'
-import { isLogged } from './helpers/isLogged'
+
 import { NotFound } from './pages/404NotFound'
 import { DonationCampaignInfo } from './pages/DonationCampaign/Info'
 import { api } from './services/api'
 import { IResponse } from './interfaces/IResponse'
+import { useAuth } from './contexts/Authentication/AuthContext'
 
 const PrivateRoutes = () => {
-  const isUserLogged = isLogged()
+  const { isAuthenticated } = useAuth()
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />
+}
 
-  return isUserLogged ? <Outlet /> : <Navigate to="/login" replace={false} />
+const LoginRoute = () => {
+  const { isAuthenticated } = useAuth()
+  return !isAuthenticated ? <Login /> : <Navigate to="/" replace />
 }
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route element={<PrivateRoutes />}>
-        <Route
-          path="/create/donation-campaign"
-          element={<CreateDonationCampaign />}
-          action={isLogged}
-        />
-      </Route>
       <Route path="/" element={<DefaultLayout />}>
+        <Route element={<PrivateRoutes />}>
+          <Route
+            path="/create/donation-campaign"
+            element={<CreateDonationCampaign />}
+          />
+        </Route>
         <Route
           path="/"
           element={<Home />}
@@ -43,21 +47,22 @@ export const router = createBrowserRouter(
             return donationCampaigns
           }}
         />
-      </Route>
-      <Route
-        path="/view/donation-campaign/:id"
-        element={<DonationCampaignInfo />}
-        loader={async ({ params }) => {
-          const response: IResponse = await api.get(
-            `/donation-campaign/findById/${params.id}`,
-          )
-          const donationCampaign = response.data.payload
+        <Route
+          path="/view/donation-campaign/:id"
+          element={<DonationCampaignInfo />}
+          loader={async ({ params }) => {
+            const response: IResponse = await api.get(
+              `/donation-campaign/findById/${params.id}`,
+            )
+            const donationCampaign = response.data.payload
 
-          return donationCampaign
-        }}
-      />
+            return donationCampaign
+          }}
+        />
+      </Route>
+
       <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<LoginRoute />} />
 
       <Route path="*" element={<NotFound />} />
     </>,

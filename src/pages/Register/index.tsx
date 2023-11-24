@@ -53,8 +53,6 @@ export function Register() {
       methods.reset()
       showSnackbar(result.data.message, 'success')
     }
-
-    console.log(result)
   }
 
   return (

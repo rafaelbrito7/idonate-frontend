@@ -1,5 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import nookies from 'nookies'
 
 import { Button, Divider } from '@mui/material'
 import * as zod from 'zod'
@@ -9,10 +10,14 @@ import { TextInput } from '../../components/TextInput'
 
 import { ButtonGroup, Container, FormContainer, Title } from './styles'
 
-import { useNavigate } from 'react-router-dom'
-import { setRefreshTokenCookie, setTokenCookie } from '../../config/tokens'
+import { useLocation, useNavigate } from 'react-router-dom'
+import {
+  setRefreshTokenCookie,
+  setAccessTokenCookie,
+} from '../../config/tokens'
 
 import { useSnackbarContext } from '../../hooks/snackbar/useSnackbarContext'
+import { useAuth } from '../../contexts/Authentication/AuthContext'
 
 const loginFormValidationSchema = zod.object({
   email: zod.string().email(),
@@ -31,24 +36,29 @@ export function Login() {
   })
   const navigate = useNavigate()
   const { showSnackbar } = useSnackbarContext()
-
-  if (!showSnackbar) {
-    throw new Error('showSnackbar is not available within SnackbarContext')
-  }
+  const { setIsAuthenticated } = useAuth()
+  const location = useLocation()
+  const message = location.state?.message
 
   const onSubmit = async (data: LoginFormData) => {
     try {
+      methods.reset()
+
+      const cookies = nookies.get()
+
+      if (cookies.access_token) nookies.destroy(null, 'access_token')
+      if (cookies.refresh_token) nookies.destroy(null, 'refresh_token')
+
       const response = await api.post('/auth/login', data)
 
       const {
         payload: { tokens },
       } = response.data
 
-      setTokenCookie('access_token', tokens.access_token)
+      setAccessTokenCookie('access_token', tokens.access_token)
       setRefreshTokenCookie(tokens.refresh_token)
 
-      methods.reset()
-
+      setIsAuthenticated(true)
       navigate('/', { replace: true })
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,6 +83,7 @@ export function Login() {
     <Container>
       <FormProvider {...methods}>
         <Title>IDonate</Title>
+        {message && <p>{message}</p>}
         <FormContainer onSubmit={methods.handleSubmit(onSubmit)}>
           <Title>Fazer Login</Title>
           <TextInput
