@@ -5,14 +5,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { ptBR } from 'date-fns/locale'
 import { SnackbarProvider } from './providers/Snackbar'
+import { AuthProvider } from './contexts/Authentication/AuthContext'
 
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
-      <SnackbarProvider>
-        <RouterProvider router={router} />
-        <GlobalStyle />
-      </SnackbarProvider>
+      <AuthProvider>
+        <SnackbarProvider>
+          <RouterProvider router={router} />
+          <GlobalStyle />
+        </SnackbarProvider>
+      </AuthProvider>
     </LocalizationProvider>
   )
 }

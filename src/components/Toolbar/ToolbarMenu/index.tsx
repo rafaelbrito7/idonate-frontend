@@ -48,18 +48,18 @@ export default function ToolbarMenu({
         }}
       >
         {isLogged ? (
-          <>
+          <div>
             <MenuItem onClick={handleClose}>Minhas Campanhas</MenuItem>
             <MenuItem onClick={handleClose}>Meu perfil</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
-          </>
+          </div>
         ) : (
-          <>
+          <div>
             <MenuItem onClick={() => navigate('/login')}>Entrar</MenuItem>
             <MenuItem onClick={() => navigate('/register')}>
               Registrar-se
             </MenuItem>
-          </>
+          </div>
         )}
       </Menu>
     </div>

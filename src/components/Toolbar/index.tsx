@@ -5,36 +5,16 @@ import Typography from '@mui/material/Typography'
 
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
-import { isLogged } from '../../helpers/isLogged'
-import { destroyCookie } from 'nookies'
-import { api } from '../../services/api'
-import { IResponse } from '../../interfaces/IResponse'
 
 import ToolbarMenu from './ToolbarMenu'
-import { useSnackbarContext } from '../../hooks/snackbar/useSnackbarContext'
+import { useLogout } from '../../hooks/logout/useLogout'
+import { useAuth } from '../../contexts/Authentication/AuthContext'
 
 export default function CustomToolbar() {
+  const { isAuthenticated } = useAuth()
+
   const navigate = useNavigate()
-  const { showSnackbar } = useSnackbarContext()
-  const userIsLogged = isLogged()
-
-  if (!showSnackbar) {
-    throw new Error('showSnackbar is not available within SnackbarContext')
-  }
-
-  const handleLogout = async () => {
-    const response: IResponse = await api.post('/auth/logout')
-
-    if (response.data.statusCode === 200) {
-      destroyCookie(null, 'access_token')
-      destroyCookie(null, 'refresh_token')
-      navigate('/')
-      window.location.reload()
-      showSnackbar(response.data.message, 'success')
-    } else {
-      showSnackbar(response.data.message, 'error')
-    }
-  }
+  const logout = useLogout()
 
   const darkTheme = createTheme({
     palette: {
@@ -58,7 +38,7 @@ export default function CustomToolbar() {
               IDonate
             </Typography>
 
-            <ToolbarMenu isLogged={userIsLogged} handleLogout={handleLogout} />
+            <ToolbarMenu isLogged={isAuthenticated} handleLogout={logout} />
           </Toolbar>
         </AppBar>
       </ThemeProvider>
