@@ -2,14 +2,13 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { getAccessTokenAndRefreshToken } from '../config/tokens'
 
-const cookies = getAccessTokenAndRefreshToken()
-
 export const api: AxiosInstance = axios.create({
   baseURL: 'http://localhost:3000',
 } as AxiosRequestConfig)
 
 api.interceptors.request.use(
   async (config) => {
+    const cookies = getAccessTokenAndRefreshToken()
     const accessToken = cookies.accessToken
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`

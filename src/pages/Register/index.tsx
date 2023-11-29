@@ -1,14 +1,20 @@
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { subYears } from 'date-fns'
-import { Button } from '@mui/material'
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Typography,
+  Container,
+} from '@mui/material'
 import * as zod from 'zod'
 
 import { api } from '../../services/api'
 import { TextInput } from '../../components/TextInput'
 import { MUDatePicker } from '../../components/DatePicker'
 
-import { ButtonGroup, Container, FormContainer, Title } from './styles'
 import { IResponse } from '../../interfaces/IResponse'
 
 import { useNavigate } from 'react-router-dom'
@@ -56,74 +62,134 @@ export function Register() {
   }
 
   return (
-    <Container>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh', // Use minHeight to ensure it can expand if needed
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: { xs: 2, sm: 3, md: 10 }, // Reduced padding for xs screens
+        bgcolor: 'background.default',
+      }}
+    >
       <FormProvider {...methods}>
-        <Title>IDonate</Title>
-        <FormContainer onSubmit={methods.handleSubmit(onSubmit)}>
-          <Title>Criar conta</Title>
-          <TextInput
-            name="email"
-            id="email"
-            label="Email"
-            required={true}
-            variant="outlined"
-          />
+        <Container maxWidth="sm">
+          <Typography
+            variant="h4"
+            textAlign="center"
+            sx={{
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+              mt: { xs: 2, sm: 3 }, // Adjust top margin for small screens
+              mb: { xs: 1, sm: 2 }, // Adjust bottom margin for small screens
+            }}
+          >
+            IDonate
+          </Typography>
+          <Box
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: 1,
+              p: { xs: 2, sm: 3 }, // Reduced padding for xs screens
+              border: 1,
+              borderColor: 'grey.300',
+              gap: 2,
+              boxShadow: 1,
+              bgcolor: 'background.paper',
+              overflow: 'auto', // Add overflow to handle small screen heights
+            }}
+            onSubmit={methods.handleSubmit(onSubmit)}
+          >
+            <Typography
+              variant="h5"
+              textAlign="center"
+              sx={{
+                fontSize: { xs: '1.25rem', sm: '1.5rem', md: '2rem' },
+                mb: { xs: 1, sm: 2 }, // Adjust bottom margin for small screens
+              }}
+            >
+              Criar conta
+            </Typography>
+            <TextInput
+              id="email"
+              name="email"
+              label="Email"
+              required={true}
+              variant="outlined"
+            />
+            <TextInput
+              id="firstName"
+              name="firstName"
+              label="Nome"
+              required={true}
+              variant="outlined"
+            />
+            <TextInput
+              id="lastName"
+              name="lastName"
+              label="Sobrenome"
+              required={true}
+              variant="outlined"
+            />
+            <MUDatePicker
+              label="Data de Nascimento"
+              name="birthday"
+              required={true}
+              maxDate={subYears(new Date(), 18)}
+            />
+            <TextInput
+              id="cpf"
+              name="cpf"
+              label="CPF"
+              required={true}
+              variant="outlined"
+            />
+            <TextInput
+              id="password"
+              name="password"
+              label="Senha"
+              required={true}
+              variant="outlined"
+              type="password"
+            />
 
-          <TextInput
-            name="firstName"
-            id="firstName"
-            label="Nome"
-            required={true}
-            variant="outlined"
-          />
+            <Grid container spacing={2} mt={2}>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Registrar-se
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  fullWidth
+                  onClick={() => navigate(-1)}
+                >
+                  Cancelar
+                </Button>
+              </Grid>
+            </Grid>
 
-          <TextInput
-            name="lastName"
-            id="lastName"
-            label="Sobrenome"
-            required={true}
-            variant="outlined"
-          />
-
-          <MUDatePicker
-            label="Data de Nascimento"
-            name="birthday"
-            required={true}
-            maxDate={subYears(new Date(), 18)}
-          />
-
-          <TextInput
-            name="cpf"
-            id="cpf"
-            label="CPF"
-            required={true}
-            variant="outlined"
-          />
-
-          <TextInput
-            name="password"
-            id="password"
-            label="Senha"
-            required={true}
-            variant="outlined"
-            type="password"
-          />
-
-          <ButtonGroup>
-            <Button type="submit" variant="contained" color="success">
-              Registrar-se
-            </Button>
+            <Divider sx={{ my: 2 }} />
 
             <Button
-              variant="outlined"
-              color="error"
-              onClick={() => navigate(-1)}
+              variant="text"
+              fullWidth
+              onClick={() => navigate('/login', { replace: true })}
             >
-              Cancelar
+              Já possui uma conta? Faça login
             </Button>
-          </ButtonGroup>
-        </FormContainer>
+          </Box>
+        </Container>
       </FormProvider>
-    </Container>
+    </Box>
   )
 }

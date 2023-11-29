@@ -2,13 +2,18 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import nookies from 'nookies'
 
-import { Button, Divider } from '@mui/material'
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Typography,
+  Container,
+} from '@mui/material'
 import * as zod from 'zod'
 
 import { api } from '../../services/api'
 import { TextInput } from '../../components/TextInput'
-
-import { ButtonGroup, Container, FormContainer, Title } from './styles'
 
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
@@ -80,50 +85,92 @@ export function Login() {
   }
 
   return (
-    <Container>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: { xs: 3, md: 10 }, // responsive padding
+        bgcolor: 'background.default',
+      }}
+    >
       <FormProvider {...methods}>
-        <Title>IDonate</Title>
-        {message && <p>{message}</p>}
-        <FormContainer onSubmit={methods.handleSubmit(onSubmit)}>
-          <Title>Fazer Login</Title>
-          <TextInput
-            name="email"
-            id="email"
-            label="Email"
-            required={true}
-            variant="outlined"
-          />
-
-          <TextInput
-            name="password"
-            id="password"
-            label="Senha"
-            required={true}
-            variant="outlined"
-            type="password"
-          />
-
-          <ButtonGroup>
-            <Button type="submit" variant="contained" color="success">
-              Entrar
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => navigate('/', { replace: true })}
-            >
-              Cancelar
-            </Button>
-          </ButtonGroup>
-          <Divider />
-          <Button
-            variant="text"
-            onClick={() => navigate('/register', { replace: true })}
+        <Container maxWidth="sm">
+          <Typography variant="h4" textAlign="center" mb={2}>
+            IDonate
+          </Typography>
+          {message && <Typography>{message}</Typography>}
+          <Box
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: 1,
+              p: 3,
+              border: 1,
+              borderColor: 'grey.300',
+              gap: 2,
+              boxShadow: 1,
+              bgcolor: 'background.paper',
+            }}
+            onSubmit={methods.handleSubmit(onSubmit)}
           >
-            Não possui uma conta? Registre-se aqui
-          </Button>
-        </FormContainer>
+            <Typography variant="h5" textAlign="center">
+              Fazer Login
+            </Typography>
+            <TextInput
+              name="email"
+              id="email"
+              label="Email"
+              required={true}
+              variant="outlined"
+            />
+            <TextInput
+              name="password"
+              id="password"
+              label="Senha"
+              required={true}
+              variant="outlined"
+              type="password"
+            />
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="success"
+                  fullWidth
+                >
+                  Entrar
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  fullWidth
+                  onClick={() => navigate('/', { replace: true })}
+                >
+                  Cancelar
+                </Button>
+              </Grid>
+            </Grid>
+
+            <Divider sx={{ my: 2 }} />
+
+            <Button
+              variant="text"
+              fullWidth
+              onClick={() => navigate('/register', { replace: true })}
+            >
+              Não possui uma conta? Registre-se aqui
+            </Button>
+          </Box>
+        </Container>
       </FormProvider>
-    </Container>
+    </Box>
   )
 }

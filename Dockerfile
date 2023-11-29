@@ -30,6 +30,7 @@ FROM node:21-alpine
 ENV HOME=/app
 
 RUN mkdir -p $HOME && chown node:node $HOME
+
 WORKDIR $HOME
 
 # Copy the node_modules and dist directory from the builder stage
