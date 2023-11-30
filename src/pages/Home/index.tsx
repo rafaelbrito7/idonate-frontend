@@ -21,18 +21,18 @@ export function Home() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '90vh', // Use minHeight to allow content to expand
-        padding: { xs: 2, sm: 3, md: 4 }, // Responsive padding
+
+        padding: { xs: 2, sm: 3, md: 4 },
       }}
     >
       <Box
         sx={{
           display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' }, // Stack on small screens, row on larger
+          flexDirection: { xs: 'column', sm: 'row' },
           justifyContent: 'space-between',
-          alignItems: { xs: 'flex-start', sm: 'center' }, // Align start on small screens, center on larger
-          marginBottom: { xs: 2, sm: 3 }, // Responsive margin-bottom
-          gap: { xs: 2, sm: 0 }, // Add gap for small screens when items are stacked
+          alignItems: { xs: 'flex-start', sm: 'center' },
+          marginBottom: { xs: 2, sm: 3 },
+          gap: { xs: 2, sm: 0 },
         }}
       >
         <Typography
@@ -45,29 +45,23 @@ export function Home() {
         <Button
           variant="contained"
           onClick={() => navigate('/create/donation-campaign')}
-          sx={{ alignSelf: 'center' }} // Center the button for small screens
+          sx={{ alignSelf: 'center' }}
         >
           Criar campanha
         </Button>
       </Box>
 
-      <Box
-        sx={{
-          overflow: 'auto',
-          flex: 1,
-        }}
-      >
-        <Grid container spacing={2}>
-          {paginatedItems.map((item, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-              <DonationCampaignCard
-                id={item.id}
-                description={item.description}
-                current={item.moneyRaised}
-                goal={item.goal}
-                title={item.title}
-              />
-            </Grid>
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '90vh' }}>
+        <Grid container spacing={2} sx={{ width: '100%', margin: 0 }}>
+          {paginatedItems.map((item) => (
+            <DonationCampaignCard
+              key={item.id}
+              id={item.id}
+              description={item.description}
+              current={item.moneyRaised}
+              goal={item.goal}
+              title={item.title}
+            />
           ))}
         </Grid>
       </Box>
@@ -85,7 +79,7 @@ export function Home() {
           onChange={(event, page) => setCurrentPage(page)}
           variant="outlined"
           shape="rounded"
-          sx={{ marginY: { xs: 2, sm: 3 } }} // Responsive vertical margin
+          sx={{ marginY: { xs: 2, sm: 3 } }}
         />
       </Box>
     </Box>

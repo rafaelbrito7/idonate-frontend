@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography'
 import LinearProgress from '@mui/material/LinearProgress'
 import Link from '@mui/material/Link'
 import { useNavigate } from 'react-router-dom'
+import { Grid } from '@mui/material'
 
 interface IDonationCampaignCardProps {
   id: string
@@ -37,15 +38,15 @@ export function DonationCampaignCard({
   }
 
   return (
-    <Box sx={{ minWidth: 275, m: 2 }}>
+    <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card
         variant="outlined"
         sx={{
-          maxWidth: '100%',
-          width: 'auto',
-          minWidth: 275,
+          display: 'flex',
+          flexDirection: 'column',
           borderRadius: 2,
           boxShadow: 3,
+          maxWidth: '100%', // Ensures Card does not exceed the width of the Grid item
         }}
       >
         <CardContent>
@@ -85,6 +86,6 @@ export function DonationCampaignCard({
           </Button>
         </CardActions>
       </Card>
-    </Box>
+    </Grid>
   )
 }

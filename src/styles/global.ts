@@ -1,20 +1,27 @@
-import { createGlobalStyle } from 'styled-components'
+import { createTheme } from '@mui/material/styles'
 
-export const GlobalStyle = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+// Create a theme instance.
+export const theme = createTheme({
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
 
-  body {
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
+        body {
+          min-height: 100vh;
+          -webkit-font-smoothing: antialiased;
+        }
 
-  body, input, textarea, button {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 1rem;
-  }
-`
+        body, input, textarea, button {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 400;
+          font-size: 1rem;
+        }
+      `,
+    },
+  },
+})

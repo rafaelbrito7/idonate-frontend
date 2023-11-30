@@ -1,64 +1,78 @@
-import { Button } from '@mui/material'
-import { IDonationCampaign } from '../../../interfaces/IDonationCampaign'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import {
   Container,
-  ContentContainer,
-  DonationCampaignInfoContainer,
-  HeaderContainer,
-} from './styles'
-
-import { useLoaderData, useNavigate } from 'react-router-dom'
-
+  Typography,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+} from '@mui/material'
+import { IDonationCampaign } from '../../../interfaces/IDonationCampaign'
 import donationCampaignImg from '../../../assets/donationCampaignLogo.jpg'
 
 export function DonationCampaignInfo() {
   const donationCampaign = useLoaderData() as IDonationCampaign
-
   const navigate = useNavigate()
 
   return (
-    <Container>
-      <HeaderContainer>
-        <h1>Campanha de doação</h1>
-      </HeaderContainer>
-      <ContentContainer>
-        <DonationCampaignInfoContainer>
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-            }}
+    <Container maxWidth="sm" sx={{ py: 4 }}>
+      <Grid container spacing={2} direction="column" alignItems="center">
+        <Grid item xs={12}>
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            textAlign="center"
           >
-            <img
-              src={donationCampaignImg}
-              alt={donationCampaign.title}
-              height={350}
-            />
-          </div>
-          <h2>{donationCampaign.title}</h2>
-
-          <span>
-            <b>Organizador: </b>
-            {donationCampaign.campaignOrganizer?.firstName}{' '}
-            {donationCampaign.campaignOrganizer?.lastName}
-          </span>
-          <span>
-            <b>Meta:</b> R${donationCampaign.goal}
-          </span>
-          <span>
-            <b>Arrecadado:</b> R${donationCampaign.moneyRaised}
-          </span>
-
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => navigate('')}
-          >
-            Fazer doação
-          </Button>
-        </DonationCampaignInfoContainer>
-      </ContentContainer>
+            Campanha de doação
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Grid container justifyContent="center">
+                <Grid item>
+                  <img
+                    src={donationCampaignImg}
+                    alt={donationCampaign.title}
+                    style={{ width: '100%', maxWidth: 350, height: 'auto' }}
+                  />
+                </Grid>
+              </Grid>
+              <Typography
+                variant="h5"
+                component="h2"
+                textAlign="center"
+                gutterBottom
+              >
+                {donationCampaign.title}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <strong>Organizador:</strong>{' '}
+                {`${donationCampaign.campaignOrganizer?.firstName} ${donationCampaign.campaignOrganizer?.lastName}`}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <strong>Meta:</strong> R${donationCampaign.goal.toFixed(2)}
+              </Typography>
+              <Typography variant="body1">
+                <strong>Arrecadado:</strong> R$
+                {donationCampaign.moneyRaised.toFixed(2)}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={() => navigate('/donate')}
+              >
+                Fazer doação
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      </Grid>
     </Container>
   )
 }
