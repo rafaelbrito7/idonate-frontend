@@ -1,4 +1,11 @@
-import { Button, Grid, Box, Typography, Pagination } from '@mui/material'
+import {
+  Button,
+  Grid,
+  Box,
+  Typography,
+  Pagination,
+  Container,
+} from '@mui/material'
 import { DonationCampaignCard } from '../../components/DonationCampaignCard'
 import { useMemo, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
@@ -17,55 +24,53 @@ export function Home() {
   }, [currentPage, pageSize, donationCampaigns])
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-
-        padding: { xs: 2, sm: 3, md: 4 },
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          justifyContent: 'space-between',
-          alignItems: { xs: 'flex-start', sm: 'center' },
-          marginBottom: { xs: 2, sm: 3 },
-          gap: { xs: 2, sm: 0 },
-        }}
-      >
-        <Typography
-          variant="h4"
-          component="h1"
-          sx={{ marginBottom: { xs: 2, sm: 0 } }}
+    <>
+      <Container>
+        <Grid
+          container
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            margin: '1rem 0',
+          }}
         >
-          Campanhas
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={() => navigate('/create/donation-campaign')}
-          sx={{ alignSelf: 'center' }}
-        >
-          Criar campanha
-        </Button>
-      </Box>
+          <Grid item>
+            <Typography
+              variant="h4"
+              component="h1"
+              sx={{
+                marginBottom: { xs: 2, sm: 0 },
+                fontSize: { xs: 20, sm: 30, md: 40, lg: 50, xl: 40 },
+              }}
+            >
+              Campanhas
+            </Typography>
+          </Grid>
+          <Grid>
+            <Button
+              variant="contained"
+              onClick={() => navigate('/create/donation-campaign')}
+              sx={{ alignSelf: 'center' }}
+            >
+              Criar campanha
+            </Button>
+          </Grid>
+        </Grid>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '90vh' }}>
-        <Grid container spacing={2} sx={{ width: '100%', margin: 0 }}>
+        <Grid container spacing={2}>
           {paginatedItems.map((item) => (
-            <DonationCampaignCard
-              key={item.id}
-              id={item.id}
-              description={item.description}
-              current={item.moneyRaised}
-              goal={item.goal}
-              title={item.title}
-            />
+            <Grid item xs={12} md={6} key={item.id}>
+              <DonationCampaignCard
+                id={item.id}
+                description={item.description}
+                current={item.moneyRaised}
+                goal={item.goal}
+                title={item.title}
+              />
+            </Grid>
           ))}
         </Grid>
-      </Box>
-
+      </Container>
       <Box
         sx={{
           display: 'flex',
@@ -82,6 +87,6 @@ export function Home() {
           sx={{ marginY: { xs: 2, sm: 3 } }}
         />
       </Box>
-    </Box>
+    </>
   )
 }

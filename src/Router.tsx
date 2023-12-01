@@ -15,16 +15,16 @@ import { NotFound } from './pages/404NotFound'
 import { DonationCampaignInfo } from './pages/DonationCampaign/Info'
 import { api } from './services/api'
 import { IResponse } from './interfaces/IResponse'
-import { useAuth } from './contexts/Authentication/AuthContext'
+import { isAuthenticated } from './helpers/auth'
 
 const PrivateRoutes = () => {
-  const { isAuthenticated } = useAuth()
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />
+  const authStatus = isAuthenticated()
+  return authStatus ? <Outlet /> : <Navigate to="/login" replace />
 }
 
 const LoginRoute = () => {
-  const { isAuthenticated } = useAuth()
-  return !isAuthenticated ? <Login /> : <Navigate to="/" replace />
+  const authStatus = isAuthenticated()
+  return !authStatus ? <Login /> : <Navigate to="/" replace />
 }
 
 export const router = createBrowserRouter(

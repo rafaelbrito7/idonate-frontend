@@ -28,8 +28,6 @@ export const setRefreshTokenCookie = (tkt: string) => {
   })
 }
 
-export const destroyToken = (cookieName: string, ctx?: any) => {
-  nookies.destroy(ctx ?? {}, cookieName, {
-    path: '/',
-  })
+export const destroyToken = (cookieName: string) => {
+  nookies.destroy(null, cookieName)
 }
