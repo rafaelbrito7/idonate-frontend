@@ -2,31 +2,34 @@ import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu' // For the menu icon in smaller screens
-import { useTheme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { destroyCookie } from 'nookies'
+
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../contexts/Authentication/AuthContext'
-import { api } from '../../services/api'
+
 import ToolbarMenu from './ToolbarMenu'
+import { useSnackbarContext } from '../../hooks/snackbar/useSnackbarContext'
+import { isAuthenticated, logout } from '../../helpers/auth'
 
 export default function CustomToolbar() {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const { setIsAuthenticated, isAuthenticated } = useAuth()
   const navigate = useNavigate()
+
+  const { showSnackbar } = useSnackbarContext()
+
+  const isAuth = isAuthenticated()
 
   async function handleLogout() {
     try {
-      await api.post('/auth/logout')
-      destroyCookie(null, 'access_token')
-      destroyCookie(null, 'refresh_token')
-      setIsAuthenticated(false)
+      await logout()
       navigate('/login')
+      showSnackbar('Logout realizado com sucesso!', 'success')
     } catch (error) {
-      console.log(error)
+      if (error instanceof Error) {
+        showSnackbar(error.message, 'error')
+      } else {
+        showSnackbar(
+          'Algo inesperado aconteceu. Tente novamente mais tarde!',
+          'error',
+        )
+      }
     }
   }
 
@@ -34,18 +37,6 @@ export default function CustomToolbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {isMobile && (
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              // Implement functionality to toggle a drawer or menu
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
           <Typography
             variant="h6"
             component="div"
@@ -54,12 +45,8 @@ export default function CustomToolbar() {
           >
             IDonate
           </Typography>
-          {!isMobile && (
-            <ToolbarMenu
-              isLogged={isAuthenticated}
-              handleLogout={handleLogout}
-            />
-          )}
+
+          <ToolbarMenu isLogged={isAuth} handleLogout={handleLogout} />
         </Toolbar>
       </AppBar>
     </Box>

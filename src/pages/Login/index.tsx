@@ -1,6 +1,5 @@
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import nookies from 'nookies'
 
 import {
   Box,
@@ -12,22 +11,14 @@ import {
 } from '@mui/material'
 import * as zod from 'zod'
 
-import { api } from '../../services/api'
 import { TextInput } from '../../components/TextInput'
 
 import { useLocation, useNavigate } from 'react-router-dom'
-import {
-  setRefreshTokenCookie,
-  setAccessTokenCookie,
-} from '../../config/tokens'
 
 import { useSnackbarContext } from '../../hooks/snackbar/useSnackbarContext'
-import { useAuth } from '../../contexts/Authentication/AuthContext'
 
-const loginFormValidationSchema = zod.object({
-  email: zod.string().email(),
-  password: zod.string().min(8),
-})
+import { loginFormValidationSchema } from '../../schemas/zod'
+import { login } from '../../helpers/auth'
 
 type LoginFormData = zod.infer<typeof loginFormValidationSchema>
 
@@ -41,7 +32,7 @@ export function Login() {
   })
   const navigate = useNavigate()
   const { showSnackbar } = useSnackbarContext()
-  const { setIsAuthenticated } = useAuth()
+
   const location = useLocation()
   const message = location.state?.message
 
@@ -49,35 +40,16 @@ export function Login() {
     try {
       methods.reset()
 
-      const cookies = nookies.get()
+      await login(data)
 
-      if (cookies.access_token) nookies.destroy(null, 'access_token')
-      if (cookies.refresh_token) nookies.destroy(null, 'refresh_token')
-
-      const response = await api.post('/auth/login', data)
-
-      const {
-        payload: { tokens },
-      } = response.data
-
-      setAccessTokenCookie('access_token', tokens.access_token)
-      setRefreshTokenCookie(tokens.refresh_token)
-
-      setIsAuthenticated(true)
-      navigate('/', { replace: true })
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (error.response) {
-        showSnackbar(error.response.data.message, 'error')
-      } else if (error.request) {
-        showSnackbar(
-          'Nenhuma resposta recebida pelo servidor. Tente novamente mais tarde!',
-          'error',
-        )
+      navigate('/')
+      showSnackbar('Login realizado com sucesso!', 'success')
+    } catch (error) {
+      if (error instanceof Error) {
+        showSnackbar(error.message, 'error')
       } else {
         showSnackbar(
-          'Algo inesperado aconteceu. Tente novamente mais tarde',
+          'Algo inesperado aconteceu. Tente novamente mais tarde!',
           'error',
         )
       }
@@ -92,7 +64,7 @@ export function Login() {
         height: '100vh',
         alignItems: 'center',
         justifyContent: 'center',
-        p: { xs: 3, md: 10 }, // responsive padding
+        p: { xs: 3, md: 10 },
         bgcolor: 'background.default',
       }}
     >
