@@ -1,13 +1,11 @@
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Button } from '@mui/material'
+import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import * as zod from 'zod'
 
 import { api } from '../../../services/api'
 import { TextInput } from '../../../components/TextInput'
-
-import { ButtonGroup, Container, FormContainer, Title } from './styles'
 
 import { useNavigate } from 'react-router-dom'
 import { CustomCurrencyInput } from '../../../components/CurrencyInput'
@@ -68,49 +66,88 @@ export function CreateDonationCampaign() {
   }
 
   return (
-    <Container>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        minHeight: '90vh',
+        justifyContent: 'center',
+        p: { xs: 3, md: 10 },
+        bgcolor: 'background.default',
+        overflow: 'auto',
+      }}
+    >
       <FormProvider {...methods}>
-        <FormContainer onSubmit={methods.handleSubmit(onSubmit)}>
-          <Title>IDonate</Title>
-          <TextInput
-            name="title"
-            id="title"
-            label="Título da Campanha"
-            required
-            variant="outlined"
-          />
+        <Container maxWidth="sm">
+          <Typography variant="h4" textAlign="center" mb={2}>
+            IDonate
+          </Typography>
+          <Box
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: 1,
+              p: { xs: 2, sm: 3 },
+              border: 1,
+              borderColor: 'grey.300',
+              gap: 2,
+              boxShadow: 1,
+              bgcolor: 'background.paper',
+            }}
+            onSubmit={methods.handleSubmit(onSubmit)}
+          >
+            <Typography variant="h5" textAlign="center">
+              Criar campanha
+            </Typography>
 
-          <TextInput
-            name="description"
-            id="description"
-            label="Descrição da Campanha"
-            required
-            variant="outlined"
-          />
-
-          <CustomCurrencyInput
-            name="goal"
-            id="goal"
-            label="Meta da campanha"
-            required
-            variant="outlined"
-          />
-
-          <ButtonGroup>
-            <Button type="submit" variant="contained">
-              Criar Campanha
-            </Button>
-
-            <Button
+            <TextInput
+              name="title"
+              id="title"
+              label="Título da Campanha"
+              required
               variant="outlined"
-              color="error"
-              onClick={() => navigate('/', { replace: true })}
-            >
-              Cancelar
-            </Button>
-          </ButtonGroup>
-        </FormContainer>
+            />
+            <TextInput
+              name="description"
+              id="description"
+              label="Descrição da Campanha"
+              required
+              variant="outlined"
+            />
+            <CustomCurrencyInput
+              name="goal"
+              id="goal"
+              label="Meta da campanha"
+              required
+              variant="outlined"
+            />
+            <Grid container spacing={2} mt={2}>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Criar campanha
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  fullWidth
+                  onClick={() => navigate(-1)}
+                >
+                  Cancelar
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
       </FormProvider>
-    </Container>
+    </Box>
   )
 }

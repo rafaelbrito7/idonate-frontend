@@ -34,34 +34,3 @@ api.interceptors.response.use(
     return Promise.reject(error)
   },
 )
-
-// api.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config
-//     if (error.response.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true
-
-//       try {
-//         const refreshToken = cookies.refreshToken
-//         if (!refreshToken) {
-//           redirect('/login')
-//           return Promise.reject(error)
-//         }
-//         const { data } = await api.post('/auth/refresh', {
-//           Headers: {
-//             Authorization: `Bearer ${refreshToken}`,
-//           },
-//         })
-//         setAccessTokenCookie('access_token', data.accessToken)
-//         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
-//         return api(originalRequest)
-//       } catch (refreshError) {
-//         redirect('/login')
-
-//         return Promise.reject(refreshError)
-//       }
-//     }
-//     return Promise.reject(error)
-//   },
-// )

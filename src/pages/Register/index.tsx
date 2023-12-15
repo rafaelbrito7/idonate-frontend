@@ -66,24 +66,15 @@ export function Register() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh', // Use minHeight to ensure it can expand if needed
         alignItems: 'center',
         justifyContent: 'center',
-        p: { xs: 2, sm: 3, md: 10 }, // Reduced padding for xs screens
+        p: { sm: 3, md: 10 },
         bgcolor: 'background.default',
       }}
     >
       <FormProvider {...methods}>
         <Container maxWidth="sm">
-          <Typography
-            variant="h4"
-            textAlign="center"
-            sx={{
-              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
-              mt: { xs: 2, sm: 3 }, // Adjust top margin for small screens
-              mb: { xs: 1, sm: 2 }, // Adjust bottom margin for small screens
-            }}
-          >
+          <Typography variant="h4" textAlign="center">
             IDonate
           </Typography>
           <Box
@@ -92,13 +83,13 @@ export function Register() {
               display: 'flex',
               flexDirection: 'column',
               borderRadius: 1,
-              p: { xs: 2, sm: 3 }, // Reduced padding for xs screens
+              p: { xs: 2, sm: 3 },
               border: 1,
               borderColor: 'grey.300',
               gap: 2,
               boxShadow: 1,
               bgcolor: 'background.paper',
-              overflow: 'auto', // Add overflow to handle small screen heights
+              overflow: 'auto',
             }}
             onSubmit={methods.handleSubmit(onSubmit)}
           >
@@ -107,7 +98,7 @@ export function Register() {
               textAlign="center"
               sx={{
                 fontSize: { xs: '1.25rem', sm: '1.5rem', md: '2rem' },
-                mb: { xs: 1, sm: 2 }, // Adjust bottom margin for small screens
+                mb: { xs: 1, sm: 2 },
               }}
             >
               Criar conta

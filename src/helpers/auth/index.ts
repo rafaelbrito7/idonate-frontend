@@ -55,9 +55,9 @@ export const login = async (data: LoginFormData) => {
 
 export const logout = async () => {
   try {
-    await api.post('/auth/logout')
     destroyToken('access_token')
     destroyToken('refresh_token')
+    window.location.href = '/login'
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -66,6 +66,8 @@ export const logout = async () => {
         )
       } else if (error.request) {
         throw new Error('Erro de conexão: Incapaz de alcançar o servidor.')
+      } else if (error.message === 'JWT Expired') {
+        throw new Error('Sessão expirada. Faça login novamente!')
       } else {
         throw new Error(
           'Erro: Não foi possível lidar com a requisição de logout',
