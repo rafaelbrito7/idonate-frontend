@@ -16,6 +16,7 @@ import { DonationCampaignInfo } from './pages/DonationCampaign/Info'
 import { api } from './services/api'
 import { IResponse } from './interfaces/IResponse'
 import { isAuthenticated } from './helpers/auth'
+import { CreateDonation } from './pages/DonationCampaign/Donate'
 
 const PrivateRoutes = () => {
   const authStatus = isAuthenticated()
@@ -31,6 +32,12 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<DefaultLayout />}>
+        <Route element={<PrivateRoutes />}>
+          <Route
+            path="/donate/donation-campaign/:id"
+            element={<CreateDonation />}
+          />
+        </Route>
         <Route element={<PrivateRoutes />}>
           <Route
             path="/create/donation-campaign"

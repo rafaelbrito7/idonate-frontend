@@ -30,7 +30,7 @@ export function DonationCampaignCard({
   const [isExpanded, setIsExpanded] = useState(false)
   const displayDescription = isExpanded
     ? description
-    : `${description.substring(0, 35)}...`
+    : `${description.substring(0, 35)}`
 
   const toggleReadMore = () => {
     setIsExpanded(!isExpanded)
@@ -52,7 +52,7 @@ export function DonationCampaignCard({
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {displayDescription}
-          {description.length > 50 && (
+          {description.length > 35 && (
             <Link
               component="button"
               variant="body2"
@@ -63,7 +63,11 @@ export function DonationCampaignCard({
             </Link>
           )}
         </Typography>
-        <LinearProgress variant="determinate" value={progress} sx={{ mb: 2 }} />
+        <LinearProgress
+          variant="determinate"
+          value={progress > 100 ? 100 : progress}
+          sx={{ mb: 2 }}
+        />
         <Typography variant="body2">
           Arrecadado: R${current.toFixed(2)} - Meta: R${goal.toFixed(2)}
         </Typography>

@@ -15,7 +15,7 @@ export function Home() {
   const [currentPage, setCurrentPage] = useState(1)
   const navigate = useNavigate()
 
-  const pageSize = 9
+  const pageSize = 10
   const donationCampaigns = useLoaderData() as IDonationCampaign[]
 
   const paginatedItems = useMemo(() => {

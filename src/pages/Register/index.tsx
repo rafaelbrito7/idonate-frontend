@@ -151,7 +151,7 @@ export function Register() {
                 <Button
                   type="submit"
                   variant="contained"
-                  color="primary"
+                  color="success"
                   fullWidth
                 >
                   Registrar-se
@@ -160,7 +160,7 @@ export function Register() {
               <Grid item xs={12} sm={6}>
                 <Button
                   variant="outlined"
-                  color="secondary"
+                  color="error"
                   fullWidth
                   onClick={() => navigate(-1)}
                 >

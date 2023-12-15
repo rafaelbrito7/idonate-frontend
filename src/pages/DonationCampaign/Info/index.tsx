@@ -65,7 +65,9 @@ export function DonationCampaignInfo() {
                 variant="contained"
                 color="primary"
                 fullWidth
-                onClick={() => navigate('/donate')}
+                onClick={() =>
+                  navigate(`/donate/donation-campaign/${donationCampaign.id}`)
+                }
               >
                 Fazer doação
               </Button>

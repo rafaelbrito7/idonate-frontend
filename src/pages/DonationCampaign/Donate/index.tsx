@@ -5,48 +5,45 @@ import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import * as zod from 'zod'
 
 import { api } from '../../../services/api'
-import { TextInput } from '../../../components/TextInput'
 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { CustomCurrencyInput } from '../../../components/CurrencyInput'
 import { useSnackbarContext } from '../../../hooks/snackbar/useSnackbarContext'
 
-const newDonationCampaignFormValidationSchema = zod.object({
-  title: zod.string(),
-  description: zod.string(),
-  goal: zod.number(),
+const newDonationFormValidationSchema = zod.object({
+  moneyAmount: zod.number(),
 })
 
-type NewDonationCampaignFormData = zod.infer<
-  typeof newDonationCampaignFormValidationSchema
->
+type NewDonationFormData = zod.infer<typeof newDonationFormValidationSchema>
 
-export function CreateDonationCampaign() {
-  const methods = useForm<NewDonationCampaignFormData>({
-    resolver: zodResolver(newDonationCampaignFormValidationSchema),
+export function CreateDonation() {
+  const methods = useForm<NewDonationFormData>({
+    resolver: zodResolver(newDonationFormValidationSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      goal: 0,
+      moneyAmount: 0,
     },
   })
   const navigate = useNavigate()
   const { showSnackbar } = useSnackbarContext()
+  const { id: donationCampaignId } = useParams()
 
   if (!showSnackbar) {
     throw new Error('showSnackbar is not available within SnackbarContext')
   }
 
-  const onSubmit = async (data: NewDonationCampaignFormData) => {
+  const onSubmit = async ({ moneyAmount }: NewDonationFormData) => {
     try {
-      const response = await api.post('/donation-campaign', data)
+      const response = await api.post('/donation', {
+        moneyAmount,
+        donationCampaignId,
+      })
 
       if (response.data.statusCode === 201) {
         methods.reset()
         showSnackbar(response.data.message, 'success')
-        navigate('/', { replace: true })
       }
 
+      navigate('/', { replace: true })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.response) {
@@ -99,27 +96,13 @@ export function CreateDonationCampaign() {
             onSubmit={methods.handleSubmit(onSubmit)}
           >
             <Typography variant="h5" textAlign="center">
-              Criar campanha
+              Realizar doação
             </Typography>
 
-            <TextInput
-              name="title"
-              id="title"
-              label="Título da Campanha"
-              required
-              variant="outlined"
-            />
-            <TextInput
-              name="description"
-              id="description"
-              label="Descrição da Campanha"
-              required
-              variant="outlined"
-            />
             <CustomCurrencyInput
-              name="goal"
-              id="goal"
-              label="Meta da campanha"
+              name="moneyAmount"
+              id="moneyAmount"
+              label="Quantia para doação"
               required
               variant="outlined"
             />
@@ -131,7 +114,7 @@ export function CreateDonationCampaign() {
                   color="success"
                   fullWidth
                 >
-                  Criar campanha
+                  Realizar doação
                 </Button>
               </Grid>
               <Grid item xs={12} sm={6}>
